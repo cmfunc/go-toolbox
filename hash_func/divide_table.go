@@ -14,6 +14,6 @@ func DivideTableName(origin string, num uint32, key string) (tableName string, e
 	if err != nil {
 		return "", err
 	}
-	No := crc32.ChecksumIEEE(md5Key) / num
+	No := crc32.ChecksumIEEE(md5Key) % num
 	return fmt.Sprintf(origin+"_%d", No), nil
 }
