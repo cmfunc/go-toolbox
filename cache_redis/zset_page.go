@@ -19,7 +19,11 @@ type own struct {
 	expire          time.Duration //超时时间
 }
 
-type Piker interface{}
+type Piker interface {
+	Del(ctx context.Context, key string) (n int64, err error)
+	Set(ctx context.Context, key string, rows []interface{}, offset uint64) (err error)
+	Get(ctx context.Context, key string, offset, limit uint64) (bytesArray [][]byte, err error)
+}
 
 func NewOwn(cli *redis.Client, prefix string, ex time.Duration) Piker {
 	return &own{
@@ -70,7 +74,7 @@ func (o *own) Set(ctx context.Context, key string, rows []interface{}, offset ui
 	return nil
 }
 
-// Get 
+// Get
 // 从缓存中获取分页数据
 func (o *own) Get(ctx context.Context, key string, offset, limit uint64) (bytesArray [][]byte, err error) {
 	opts := &redis.ZRangeBy{
