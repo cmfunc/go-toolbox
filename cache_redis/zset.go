@@ -13,20 +13,16 @@ import (
 
 // 基于Redis做缓存时,分页查询场景下的缓存查询与同步封装
 
-type own struct {
+type zset struct {
 	cli             *redis.Client //redis连接客户端
 	cacheKey_Prefix string        //缓存前缀
 	expire          time.Duration //超时时间
 }
 
-type Piker interface {
-	Del(ctx context.Context, key string) (n int64, err error)
-	Set(ctx context.Context, key string, rows []interface{}, offset uint64) (err error)
-	Get(ctx context.Context, key string, offset, limit uint64) (bytesArray [][]byte, err error)
-}
 
-func NewOwn(cli *redis.Client, prefix string, ex time.Duration) Piker {
-	return &own{
+
+func NewZset(cli *redis.Client, prefix string, ex time.Duration) *zset {
+	return &zset{
 		cli:             cli,
 		cacheKey_Prefix: prefix + "::%s",
 		expire:          ex,
@@ -37,14 +33,14 @@ func NewOwn(cli *redis.Client, prefix string, ex time.Duration) Piker {
 // 插入数据时,数据更新时,数据删除时,需要将数据删除
 // key: redis缓存时,与prefix格式化拼接成唯一的列表数据标识key,所有的分页数据保存在该key下
 // 如果是用户的数据
-func (o *own) Del(ctx context.Context, key string) (n int64, err error) {
+func (o *zset) Del(ctx context.Context, key string) (n int64, err error) {
 	key = fmt.Sprint(o.cacheKey_Prefix, key)
 	return o.cli.Del(ctx, key).Result()
 }
 
 // Query
 // 查询数据时,数据库中没有数据,主动加载数据到
-func (o *own) Set(ctx context.Context, key string, rows []interface{}, offset uint64) (err error) {
+func (o *zset) Set(ctx context.Context, key string, rows []interface{}, offset uint64) (err error) {
 	if len(rows) < 1 {
 		return errors.New("rows length is zero")
 	}
@@ -76,7 +72,7 @@ func (o *own) Set(ctx context.Context, key string, rows []interface{}, offset ui
 
 // Get
 // 从缓存中获取分页数据
-func (o *own) Get(ctx context.Context, key string, offset, limit uint64) (bytesArray [][]byte, err error) {
+func (o *zset) Get(ctx context.Context, key string, offset, limit uint64) (bytesArray [][]byte, err error) {
 	opts := &redis.ZRangeBy{
 		Min:    strconv.FormatInt(int64(offset), 10),
 		Max:    strconv.FormatInt(int64(offset+limit), 10),
