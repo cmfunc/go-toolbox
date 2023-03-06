@@ -33,6 +33,7 @@ func (o *list) Del(ctx context.Context, key string) (n int64, err error) {
 	key = fmt.Sprint(o.cacheKey_Prefix, key)
 	return o.cli.Del(ctx, key).Result()
 }
+
 func (o *list) Set(ctx context.Context, key string, rows []interface{}, offset int64) (err error) {
 	if len(rows) < 1 {
 		return errors.New("rows length is zero")
@@ -58,6 +59,8 @@ func (o *list) Set(ctx context.Context, key string, rows []interface{}, offset i
 	return nil
 }
 
+// Get
+// O(S+N) where S is the distance of start offset from HEAD for small lists, from nearest end (HEAD or TAIL) for large lists; and N is the number of elements in the specified range.
 func (o *list) Get(ctx context.Context, key string, offset, limit int64) (bytesArray [][]byte, err error) {
 	key = fmt.Sprint(o.cacheKey_Prefix, key)
 	strs, err := o.cli.LRange(ctx, key, offset, limit).Result()
