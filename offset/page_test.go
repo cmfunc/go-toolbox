@@ -1,4 +1,4 @@
-package pageoffset
+package offset
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package hashfunc
+package tables
 
 import (
 	"crypto/md5"

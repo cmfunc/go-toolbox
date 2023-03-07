@@ -1,4 +1,4 @@
-package cacheredis
+package cache
 
 import (
 	"context"
@@ -18,8 +18,6 @@ type zset struct {
 	cacheKey_Prefix string        //缓存前缀
 	expire          time.Duration //超时时间
 }
-
-
 
 func NewZset(cli *redis.Client, prefix string, ex time.Duration) *zset {
 	return &zset{

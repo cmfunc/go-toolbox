@@ -1,4 +1,4 @@
-package cacheredis
+package cache
 
 import "context"
 

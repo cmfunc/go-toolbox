@@ -1,4 +1,4 @@
-package cacheredis
+package cache
 
 import (
 	"time"
@@ -20,4 +20,3 @@ func NewHash(cli *redis.Client, prefix string, ex time.Duration) *hash {
 		expire:          ex,
 	}
 }
-
