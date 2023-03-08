@@ -9,5 +9,8 @@ const (
 var builtinErr = []string{}
 
 func init() {
+	initHttp()
+	
+	builtinErr = append(builtinErr, httpErr...)
 	builtinErr[TypeErr] = "type err"
 }

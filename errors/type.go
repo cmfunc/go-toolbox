@@ -2,6 +2,6 @@ package errors
 
 type err int
 
-func (e err) String() string {
+func (e err) Error() string {
 	return builtinErr[e]
 }

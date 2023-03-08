@@ -76,7 +76,7 @@ const (
 
 var httpErr = []string{}
 
-func init() {
+func initHttp() {
 	httpErr[HttpStatusContinue] = ""
 	httpErr[HttpStatusSwitchingProtocols] = ""
 	httpErr[HttpStatusProcessing] = ""
