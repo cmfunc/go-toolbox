@@ -8,6 +8,10 @@ import (
 )
 
 // broker ===============================================
+var broker = &Broker{
+	MaxGo: defaultWorkerNum,
+	MQ:    map[Topic]Queue{},
+}
 
 const defaultWorkerNum = 100
 

@@ -48,7 +48,6 @@ func String(bs []byte) string {
 	return string(bs)
 }
 
-func Reset(bs []byte) {
-	bs = (bs)[:0]
+func Reset(bs []byte) []byte {
+	return bs[:0]
 }
-

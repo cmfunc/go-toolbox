@@ -43,3 +43,9 @@ func CombineInsertColumn(columns []InsertColumn) []byte {
 	base = AppendString(base, ")")
 	return base
 }
+
+func UpdateValue(ctx context.Context, runner Runner, table string,columns []SetColumn, ) (sql.Result, error) {
+	query := []byte("update ")
+	query = AppendString(query, table)
+
+}

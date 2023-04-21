@@ -5,11 +5,6 @@ import (
 	"sync/atomic"
 )
 
-var broker = &Broker{
-	MaxGo: defaultWorkerNum,
-	MQ:    map[Topic]Queue{},
-}
-
 func Publish(ctx context.Context, topic string, msg Message) error {
 	queue, ok := broker.MQ[Topic(topic)]
 	if !ok {
